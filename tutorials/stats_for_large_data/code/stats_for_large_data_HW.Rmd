@@ -1,0 +1,54 @@
+---
+title: "stats_for_large_data_Challenge"
+author: "Arabidopsis thaliana"
+date: "9/14/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r, echo=FALSE}
+library(dplyr)
+#read the Dataset sheet into “R”. The dataset will be called "data".
+data <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv",
+     na.strings = "",header=T)
+
+cols = as.data.frame(names(data))
+
+# location / continent / reproduction_rate / people_fully_vaccinated / stringency_index / population_density / median_age / human_development_index / life_expectancy / diabetes_prevalence / cardiovasc_death_rate / gdp_per_capita / 
+# date / new_cases / new_deaths / new_tests / positive_rate / new_vaccinations / 
+
+day = data[data$date=="2020-02-24" & !is.na(data$continent),]
+
+m = lm(data=day, new_cases ~ stringency_index) # p = 1.864e-06
+summary(m)
+
+
+day2 = data[data$date=="2021-09-01" & !is.na(data$continent),]
+
+m = lm(data=day2, new_cases ~ gdp_per_capita) # p = 0.02813
+summary(m)
+m = lm(data=day2, new_cases ~ human_development_index) # p = 0.01696
+summary(m)
+
+# stringency index: This is a composite measure based on nine response indicators including school closures, workplace
+# closures, and travel bans, rescaled to a value from 0 to 100 (100 = strictest). If policies vary at the
+# subnational level, the index is shown as the response level of the strictest sub-region.
+
+# The Human Development Index (HDI) is a summary measure of key dimensions of
+# human development: a long and healthy life, a good education, and having a decent
+# standard of living.
+```
+
+
+# 1. This significant p-value for the first test (new cases ~ stringency index) is representative of the rebellious nature of people since people don't want to abide by restrictions the countries made. Another possibility is that the stringency goes up as cases rise. Naturally, we would expect the cases to rise as the pandemic proceeds. Here, we see cases rising and more stringency following in an attempt to mitigate the cases.
+
+
+# 2. We found that the p-value for the second tests (new cases ~ gdp per capita & new cases ~ HDI) which measures the relationship between new covid cases and human development index is statistically significant. This makes sense because higher human development index is often observed in countries populated by wealthier people and wealthier people are more reckless and do not abide by COVID-19 safety protocols because they think they are better than other people. This would lead to a greater spread of COVID-19 in these countries. As an additional piece of evidence, news channels have been reporting a high frequency of illegal parties conducted by upper class individuals.
+
+
+
